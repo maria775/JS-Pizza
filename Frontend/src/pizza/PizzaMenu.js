@@ -8,6 +8,17 @@ var Pizza_List = require('../Pizza_List');
 //HTML едемент куди будуть додаватися піци
 var $pizza_list = $("#pizza_list");
 
+// var conditions = {
+//     default_pizzas_number: "Усі піци";
+//     meat: "М'ясні";
+//     pineapple: "З ананасами";
+//     mushrooms: "З грибами";
+//     seafood: "З морепродуктами";
+//     vega: "Вега";
+// };
+
+
+
 function showPizzaList(list) {
     //Очищаємо старі піци в кошику
     $pizza_list.html("");
@@ -18,10 +29,10 @@ function showPizzaList(list) {
 
         var $node = $(html_code);
 
-        $node.find(".buy-big").click(function(){
+        $node.find(".buy_big").click(function(){
             PizzaCart.addToCart(pizza, PizzaCart.PizzaSize.Big);
         });
-        $node.find(".buy-small").click(function(){
+        $node.find(".buy_small").click(function(){
             PizzaCart.addToCart(pizza, PizzaCart.PizzaSize.Small);
         });
 
@@ -40,6 +51,29 @@ function filterPizza(filter) {
         //pizza_shown.push(pizza);
 
         //TODO: зробити фільтри
+        if (filter === "all")
+            pizza_shown.push(pizza);
+
+        if (filter === "meat")
+            if (pizza.content.meat || pizza.content.chicken)
+                pizza_shown.push(pizza);
+
+        if (filter === "pineapple")
+            if (pizza.content.pineapple)
+                pizza_shown.push(pizza);
+
+        if (filter === "mushroom")
+            if (pizza.content.mushroom)
+                pizza_shown.push(pizza);
+        if (filter === "ocean")
+            if (pizza.content.ocean)
+                pizza_shown.push(pizza);
+
+        if (filter === "vega")
+            if ( !pizza.content.meat && !pizza.content.chicken && !pizza.content.ocean)
+                pizza_shown.push(pizza);
+
+
     });
 
     //Показати відфільтровані піци
@@ -48,8 +82,45 @@ function filterPizza(filter) {
 
 function initialiseMenu() {
     //Показуємо усі піци
-    showPizzaList(Pizza_List)
+    showPizzaList(Pizza_List);
+
+    $("#filter-button-all-types").click(function () {
+        filterPizza("all");
+        orange_button_activate($(this));
+    });
+
+    $("#filter-button-meat").click(function () {
+        filterPizza("meat");
+        orange_button_activate($(this));
+    });
+
+    $("#filter-button-pineapples").click(function () {
+        filterPizza("pineapple");
+        orange_button_activate($(this));
+    });
+
+    $("#filter-button-mushrooms").click(function () {
+        filterPizza("mushroom");
+        orange_button_activate($(this));
+    });
+
+    $("#filter-button-seafood").click(function () {
+        filterPizza("ocean");
+        orange_button_activate($(this));
+    });
+
+    $("#filter-button-veggies").click(function () {
+        filterPizza("vega");
+        orange_button_activate($(this));
+    });
 }
+
+function orange_button_activate (button_activate){
+    $(".btn-warning").removeClass("btn-warning");
+    button_activate.addClass("btn-warning");
+}
+
+
 
 exports.filterPizza = filterPizza;
 exports.initialiseMenu = initialiseMenu;
