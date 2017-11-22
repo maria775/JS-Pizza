@@ -8,17 +8,6 @@ var Pizza_List = require('../Pizza_List');
 //HTML едемент куди будуть додаватися піци
 var $pizza_list = $("#pizza_list");
 
-// var conditions = {
-//     default_pizzas_number: "Усі піци";
-//     meat: "М'ясні";
-//     pineapple: "З ананасами";
-//     mushrooms: "З грибами";
-//     seafood: "З морепродуктами";
-//     vega: "Вега";
-// };
-
-
-
 function showPizzaList(list) {
     //Очищаємо старі піци в кошику
     $pizza_list.html("");
@@ -50,7 +39,6 @@ function filterPizza(filter) {
         //Якщо піка відповідає фільтру
         //pizza_shown.push(pizza);
 
-        //TODO: зробити фільтри
         if (filter === "all")
             pizza_shown.push(pizza);
 
