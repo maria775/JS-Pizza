@@ -3,7 +3,10 @@
  */
 var Templates = require('../Templates');
 var PizzaCart = require('./PizzaCart');
-var Pizza_List = require('../Pizza_List');
+//var Pizza_List = require('../Pizza_List');
+
+var API = require('../API');
+var Pizza_List = [];
 
 //HTML едемент куди будуть додаватися піци
 var $pizza_list = $("#pizza_list");
@@ -71,37 +74,49 @@ function filterPizza(filter) {
 function initialiseMenu() {
     //Показуємо усі піци
     showPizzaList(Pizza_List);
+    API.getPizzaList(function(err,list){
+        if(err)
+            alert(err.message);
+        else
+        {
+            Pizza_List=list;
+            showPizzaList(Pizza_List);
 
-    $("#filter-button-all-types").click(function () {
-        filterPizza("all");
-        orange_button_activate($(this));
+        }
     });
 
-    $("#filter-button-meat").click(function () {
-        filterPizza("meat");
-        orange_button_activate($(this));
-    });
 
-    $("#filter-button-pineapples").click(function () {
-        filterPizza("pineapple");
-        orange_button_activate($(this));
-    });
-
-    $("#filter-button-mushrooms").click(function () {
-        filterPizza("mushroom");
-        orange_button_activate($(this));
-    });
-
-    $("#filter-button-seafood").click(function () {
-        filterPizza("ocean");
-        orange_button_activate($(this));
-    });
-
-    $("#filter-button-veggies").click(function () {
-        filterPizza("vega");
-        orange_button_activate($(this));
-    });
 }
+
+$("#filter-button-all-types").click(function () {
+    filterPizza("all");
+    orange_button_activate($(this));
+});
+
+$("#filter-button-meat").click(function () {
+    filterPizza("meat");
+    orange_button_activate($(this));
+});
+
+$("#filter-button-pineapples").click(function () {
+    filterPizza("pineapple");
+    orange_button_activate($(this));
+});
+
+$("#filter-button-mushrooms").click(function () {
+    filterPizza("mushroom");
+    orange_button_activate($(this));
+});
+
+$("#filter-button-seafood").click(function () {
+    filterPizza("ocean");
+    orange_button_activate($(this));
+});
+
+$("#filter-button-veggies").click(function () {
+    filterPizza("vega");
+    orange_button_activate($(this));
+});
 
 function orange_button_activate (button_activate){
     $(".btn-warning").removeClass("btn-warning");

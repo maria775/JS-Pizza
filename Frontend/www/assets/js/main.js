@@ -1,183 +1,256 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /**
- * Created by diana on 12.01.16.
+ * Created by chaika on 09.02.16.
  */
+var API_URL = "http://localhost:5050";
 
-var pizza_info = [
-    {
-        id:1,
+function backendGet(url, callback) {
+    $.ajax({
+        url: API_URL + url,
+        type: 'GET',
+        success: function(data){
+            callback(null, data);
+        },
+        error: function() {
+            callback(new Error("Ajax Failed"));
+        }
+    })
+}
 
-        icon: '../../www/assets/images/pizza_7.jpg',
-        title: "Імпреза",
-        type: 'М’ясна піца',
-        content: {
-            meat: ['балик', 'салямі'],
-            chicken: ['куриця'],
-            cheese: ['сир моцарелла', 'сир рокфорд'],
-            pineapple: ['ананаси'],
-            additional: ['томатна паста', 'петрушка']
+function backendPost(url, data, callback) {
+    $.ajax({
+        url: API_URL + url,
+        type: 'POST',
+        contentType : 'application/json',
+        data: JSON.stringify(data),
+        success: function(data){
+            callback(null, data);
         },
-        small_size:{
-            weight: 370,
-            size: 30,
-            price: 99
-        },
-        big_size:{
-            weight: 660,
-            size: 40,
-            price: 169
-        },
-        is_new:true,
-        is_popular:true
+        error: function() {
+            callback(new Error("Ajax Failed"));
+        }
+    })
+}
 
-    },
-    {
-        id:2,
-        icon:'../../www/assets/images/pizza_2.jpg',
-        title: "BBQ",
-        type: 'М’ясна піца',
-        content: {
-            meat: ['мисливські ковбаски', 'ковбаски папероні', 'шинка'],
-            cheese: ['сир домашній'],
-            mushroom: ['шампінйони'],
-            additional: ['петрушка', 'оливки']
-        },
-        small_size:{
-            weight: 460,
-            size: 30,
-            price: 139
-        },
-        big_size:{
-            weight: 840,
-            size: 40,
-            price: 199
-        },
-        is_popular:true
-    },
-    {
-        id:3,
-        icon:'../../www/assets/images/pizza_1.jpg',
-        title: "Міксовий поло",
-        type: 'М’ясна піца',
-        content: {
-            meat: ['вітчина', 'куриця копчена'],
-            cheese: ['сир моцарелла'],
-            pineapple: ['ананаси'],
-            additional: ['кукурудза', 'петрушка', 'соус томатний']
-        },
-        small_size:{
-            weight: 430,
-            size: 30,
-            price: 115
-        },
-        big_size:{
-            weight: 780,
-            size: 40,
-            price: 179
-        }
-    },
-    {
-        id:4,
-        icon:'../../www/assets/images/pizza_5.jpg',
-        title: "Сициліано",
-        type: 'М’ясна піца',
-        content: {
-            meat: ['вітчина', 'салямі'],
-            cheese: ['сир моцарелла'],
-            mushroom: ['шампінйони'],
-            additional: ['перець болгарський',  'соус томатний']
-        },
-        small_size:{
-            weight: 450,
-            size: 30,
-            price: 111
-        },
-        big_size:{
-            weight: 790,
-            size: 40,
-            price: 169
-        }
-    },
-    {
-        id:17,
-        icon:'../../www/assets/images/pizza_3.jpg',
-        title: "Маргарита",
-        type: 'Вега піца',
-        content: {
-            cheese: ['сир моцарелла', 'сир домашній'],
-            tomato: ['помідори'],
-            additional: ['базилік', 'оливкова олія', 'соус томатний']
-        },
-        small_size:{
-            weight: 370,
-            size: 30,
-            price: 89
-        }
-    },
-    {
-        id:43,
-        icon:'../../www/assets/images/pizza_6.jpg',
-        title: "Мікс смаків",
-        type: 'М’ясна піца',
-        content: {
-            meat: ['ковбаски'],
-            cheese: ['сир моцарелла'],
-            mushroom: ['шампінйони'],
-            pineapple: ['ананаси'],
-            additional: ['цибуля кримська', 'огірки квашені', 'соус гірчичний']
-        },
-        small_size:{
-            weight: 470,
-            size: 30,
-            price: 115
-        },
-        big_size:{
-            weight: 780,
-            size: 40,
-            price: 180
-        }
-    },
-    {
-        id:90,
-        icon:'../../www/assets/images/pizza_8.jpg',
-        title: "Дольче Маре",
-        type: 'Морська піца',
-        content: {
-            ocean: ['криветки тигрові', 'мідії', 'ікра червона', 'філе червоної риби'],
-            cheese: ['сир моцарелла'],
-            additional: ['оливкова олія', 'вершки']
-        },
-        big_size:{
-            weight: 845,
-            size: 40,
-            price: 399
-        }
-    },
-    {
-        id:6,
-        icon:'../../www/assets/images/pizza_4.jpg',
-        title: "Россо Густо",
-        type: 'Морська піца',
-        content: {
-            ocean: ['ікра червона', 'лосось копчений'],
-            cheese: ['сир моцарелла'],
-            additional: ['оливкова олія', 'вершки']
-        },
-        small_size:{
-            weight: 400,
-            size: 30,
-            price: 189
-        },
-        big_size:{
-            weight: 700,
-            size: 40,
-            price: 299
-        }
-    }
-];
+exports.getPizzaList = function(callback) {
+    backendGet("/api/get-pizza-list/", callback);
+};
 
-module.exports = pizza_info;
+exports.createOrder = function(order_info, callback) {
+    backendPost("/api/create-order/", order_info, callback);
+};
+
 },{}],2:[function(require,module,exports){
+function initialize() {
+//Тут починаємо працювати з картою
+    var mapProp =	{
+        center:	new	google.maps.LatLng(50.464379,30.519131),
+        zoom:	11
+    };
+    var html_element =	document.getElementById("googleMap");
+    var map	=	new	google.maps.Map(html_element, mapProp);
+//Карта створена і показана
+}
+//Коли сторінка завантажилась
+google.maps.event.addDomListener(window,'load',	initialize);
+exports.initialize = initialize;
+},{}],3:[function(require,module,exports){
+function initializeLiqPay(data,signature) {
+    LiqPayCheckout.init({
+        data: data,
+        signature: signature,
+        embedTo: "#liqpay",
+        mode: "popup"  //  embed  ||  popup
+    }).on("liqpay.callback", function (data) {
+        console.log(data.status);
+        console.log(data);
+    }).on("liqpay.ready", function (data) {
+//  ready
+    }).on("liqpay.close", function (data) {
+//  close
+    });
+}
+exports.initializeLiqPay =initializeLiqPay ;
+},{}],4:[function(require,module,exports){
+// /**
+//  * Created by diana on 12.01.16.
+//  */
+//
+// var pizza_info = [
+//     {
+//         id:1,
+//
+//         icon: '/assets/images/pizza_7.jpg',
+//         title: "Імпреза",
+//         type: 'М’ясна піца',
+//         content: {
+//             meat: ['балик', 'салямі'],
+//             chicken: ['куриця'],
+//             cheese: ['сир моцарелла', 'сир рокфорд'],
+//             pineapple: ['ананаси'],
+//             additional: ['томатна паста', 'петрушка']
+//         },
+//         small_size:{
+//             weight: 370,
+//             size: 30,
+//             price: 99
+//         },
+//         big_size:{
+//             weight: 660,
+//             size: 40,
+//             price: 169
+//         },
+//         is_new:true,
+//         is_popular:true
+//
+//     },
+//     {
+//         id:2,
+//         icon:'/assets/images/pizza_2.jpg',
+//         title: "BBQ",
+//         type: 'М’ясна піца',
+//         content: {
+//             meat: ['мисливські ковбаски', 'ковбаски папероні', 'шинка'],
+//             cheese: ['сир домашній'],
+//             mushroom: ['шампінйони'],
+//             additional: ['петрушка', 'оливки']
+//         },
+//         small_size:{
+//             weight: 460,
+//             size: 30,
+//             price: 139
+//         },
+//         big_size:{
+//             weight: 840,
+//             size: 40,
+//             price: 199
+//         },
+//         is_popular:true
+//     },
+//     {
+//         id:3,
+//         icon:'/assets/images/pizza_1.jpg',
+//         title: "Міксовий поло",
+//         type: 'М’ясна піца',
+//         content: {
+//             meat: ['вітчина', 'куриця копчена'],
+//             cheese: ['сир моцарелла'],
+//             pineapple: ['ананаси'],
+//             additional: ['кукурудза', 'петрушка', 'соус томатний']
+//         },
+//         small_size:{
+//             weight: 430,
+//             size: 30,
+//             price: 115
+//         },
+//         big_size:{
+//             weight: 780,
+//             size: 40,
+//             price: 179
+//         }
+//     },
+//     {
+//         id:4,
+//         icon:'/assets/images/pizza_5.jpg',
+//         title: "Сициліано",
+//         type: 'М’ясна піца',
+//         content: {
+//             meat: ['вітчина', 'салямі'],
+//             cheese: ['сир моцарелла'],
+//             mushroom: ['шампінйони'],
+//             additional: ['перець болгарський',  'соус томатний']
+//         },
+//         small_size:{
+//             weight: 450,
+//             size: 30,
+//             price: 111
+//         },
+//         big_size:{
+//             weight: 790,
+//             size: 40,
+//             price: 169
+//         }
+//     },
+//     {
+//         id:17,
+//         icon:'/assets/images/pizza_3.jpg',
+//         title: "Маргарита",
+//         type: 'Вега піца',
+//         content: {
+//             cheese: ['сир моцарелла', 'сир домашній'],
+//             tomato: ['помідори'],
+//             additional: ['базилік', 'оливкова олія', 'соус томатний']
+//         },
+//         small_size:{
+//             weight: 370,
+//             size: 30,
+//             price: 89
+//         }
+//     },
+//     {
+//         id:43,
+//         icon:'/assets/images/pizza_6.jpg',
+//         title: "Мікс смаків",
+//         type: 'М’ясна піца',
+//         content: {
+//             meat: ['ковбаски'],
+//             cheese: ['сир моцарелла'],
+//             mushroom: ['шампінйони'],
+//             pineapple: ['ананаси'],
+//             additional: ['цибуля кримська', 'огірки квашені', 'соус гірчичний']
+//         },
+//         small_size:{
+//             weight: 470,
+//             size: 30,
+//             price: 115
+//         },
+//         big_size:{
+//             weight: 780,
+//             size: 40,
+//             price: 180
+//         }
+//     },
+//     {
+//         id:90,
+//         icon:'/assets/images/pizza_8.jpg',
+//         title: "Дольче Маре",
+//         type: 'Морська піца',
+//         content: {
+//             ocean: ['криветки тигрові', 'мідії', 'ікра червона', 'філе червоної риби'],
+//             cheese: ['сир моцарелла'],
+//             additional: ['оливкова олія', 'вершки']
+//         },
+//         big_size:{
+//             weight: 845,
+//             size: 40,
+//             price: 399
+//         }
+//     },
+//     {
+//         id:6,
+//         icon:'./assets/images/pizza_4.jpg',
+//         title: "Россо Густо",
+//         type: 'Морська піца',
+//         content: {
+//             ocean: ['ікра червона', 'лосось копчений'],
+//             cheese: ['сир моцарелла'],
+//             additional: ['оливкова олія', 'вершки']
+//         },
+//         small_size:{
+//             weight: 400,
+//             size: 30,
+//             price: 189
+//         },
+//         big_size:{
+//             weight: 700,
+//             size: 40,
+//             price: 299
+//         }
+//     }
+// ];
+//
+// module.exports = pizza_info;
+},{}],5:[function(require,module,exports){
 /**
  * Created by chaika on 02.02.16.
  */
@@ -185,11 +258,13 @@ module.exports = pizza_info;
 var ejs = require('ejs');
 
 
-exports.PizzaMenu_OneItem = ejs.compile("<%\n\nfunction getIngredientsArray(pizza) {\n    //Отримує вміст піци\n    var content = pizza.content;\n    var result = [];\n\n    //Object.keys повертає масив ключів в об’єкті JavaScript\n\n    Object.keys(content).forEach(function(key){\n\n        //a.concat(b) створює спільний масив із масивів a та b\n        result = result.concat(content[key]);\n    });\n\n    return result;\n}\n\n   %>\n<div class=\"col-md-6 col-lg-4 pizza-card\">\n    <div class=\"thumbnail\">\n        <img class=\"pizza-icon\" src=\"<%= pizza.icon %>\" alt=\"Pizza\">\n\n        <% if(pizza.is_new) { %>\n        <span class=\"label label-danger\" >Нова</span>\n        <% } else if(pizza.is_popular) {%>\n        <span class=\"label label-success\" id=\"new-badge\">Популярна</span>\n        <% } %>\n\n        <div class=\"caption\">\n            <h3><span class=\"title\"><%= pizza.title %></span></h3>\n            <div class=\"type\"><%= pizza.type %></div>\n            <div class=\"description\">\n                <%= getIngredientsArray(pizza).join(\", \") %>\n            </div>\n            <div class=\"row order-buttons\">\n                <% if(pizza.small_size){ %>\n                <div class=\"<%= getPizzaColumn(pizza) %> centered\">\n                    <div>\n                        <img src=\"../../www/assets/images/size-icon.svg\" class=\"size-icon\">\n                        <span><%= pizza.small_size.size %></span>\n                    </div>\n\n                    <div>\n                        <img src=\"../../www/assets/images/weight.svg\" class=\"weight-icon\">\n                        <span><%= pizza.small_size.weight %></span>\n                    </div>\n\n                    <h2><%= pizza.small_size.price%></h2>\n                    <button class=\"btn btn-warning buy_small\">Купити</button>\n                </div>\n                <% }%>\n\n\n                <% if(pizza.big_size){ %>\n                <div class=\"<%= getPizzaColumn(pizza) %> centered\">\n                    <div>\n                    <img src=\"../../www/assets/images/size-icon.svg\" class=\"size-icon\">\n                    <span><%= pizza.big_size.size %></span>\n                    </div>\n\n                    <div>\n                    <img src=\"../../www/assets/images/weight.svg\" class=\"weight-icon\">\n                    <span><%= pizza.big_size.weight %></span>\n                    </div>\n\n                    <h2><%= pizza.big_size.price%></h2>\n                    <button class=\"btn btn-warning buy_big\">Купити</button>\n                </div>\n                <% }%>\n\n            </div>\n        </div>\n\n        <!-- Перед тим щоб показати кнопку необхідно переконатися, що піца має великий розмір -->\n        <!--<button class=\"btn btn-primary buy-big\">Купити велику</button>-->\n    </div>\n</div>\n\n<% function getPizzaColumn(pizza){\n    if(pizza.big_size&&pizza.small_size){\n        return \"col-sm-6\";\n    }\n    else{\n        return \"col-sm-12\";\n    }\n}%>\n\n\n<% if(pizza.small_size){\n    var info = pizza.small_size;\n}%>");
+exports.PizzaMenu_OneItem = ejs.compile("<%\n\nfunction getIngredientsArray(pizza) {\n    //Отримує вміст піци\n    var content = pizza.content;\n    var result = [];\n\n    //Object.keys повертає масив ключів в об’єкті JavaScript\n\n    Object.keys(content).forEach(function(key){\n\n        //a.concat(b) створює спільний масив із масивів a та b\n        result = result.concat(content[key]);\n    });\n\n    return result;\n}\n\n   %>\n<div class=\"col-md-6 col-lg-4 pizza-card\">\n    <div class=\"thumbnail\">\n        <img class=\"pizza-icon\" src=\"<%= pizza.icon %>\" alt=\"Pizza\">\n\n        <% if(pizza.is_new) { %>\n        <span class=\"label label-danger\" >Нова</span>\n        <% } else if(pizza.is_popular) {%>\n        <span class=\"label label-success\" id=\"new-badge\">Популярна</span>\n        <% } %>\n\n        <div class=\"caption\">\n            <h3><span class=\"title\"><%= pizza.title %></span></h3>\n            <div class=\"type\"><%= pizza.type %></div>\n            <div class=\"description\">\n                <%= getIngredientsArray(pizza).join(\", \") %>\n            </div>\n            <div class=\"row order-buttons\">\n                <% if(pizza.small_size){ %>\n                <div class=\"<%= getPizzaColumn(pizza) %> centered\">\n                    <div>\n                        <img src=\"/assets/images/size-icon.svg\" class=\"size-icon\">\n                        <span><%= pizza.small_size.size %></span>\n                    </div>\n\n                    <div>\n                        <img src=\"/assets/images/weight.svg\" class=\"weight-icon\">\n                        <span><%= pizza.small_size.weight %></span>\n                    </div>\n\n                    <h2><%= pizza.small_size.price%></h2>\n                    <button class=\"btn btn-warning buy_small\">Купити</button>\n                </div>\n                <% }%>\n\n\n                <% if(pizza.big_size){ %>\n                <div class=\"<%= getPizzaColumn(pizza) %> centered\">\n                    <div>\n                    <img src=\"/assets/images/size-icon.svg\" class=\"size-icon\">\n                    <span><%= pizza.big_size.size %></span>\n                    </div>\n\n                    <div>\n                    <img src=\"/assets/images/weight.svg\" class=\"weight-icon\">\n                    <span><%= pizza.big_size.weight %></span>\n                    </div>\n\n                    <h2><%= pizza.big_size.price%></h2>\n                    <button class=\"btn btn-warning buy_big\">Купити</button>\n                </div>\n                <% }%>\n\n            </div>\n        </div>\n\n        <!-- Перед тим щоб показати кнопку необхідно переконатися, що піца має великий розмір -->\n        <!--<button class=\"btn btn-primary buy-big\">Купити велику</button>-->\n    </div>\n</div>\n\n<% function getPizzaColumn(pizza){\n    if(pizza.big_size&&pizza.small_size){\n        return \"col-sm-6\";\n    }\n    else{\n        return \"col-sm-12\";\n    }\n}%>\n\n\n<% if(pizza.small_size){\n    var info = pizza.small_size;\n}%>");
 
-exports.PizzaCart_OneItem = ejs.compile("<div class=\"row\">\n    <div class=\"one-ordered-pizza-template\">\n    <img class=\"half-of-pizza\" alt=\"Піца\" src=\"<%= pizza.icon%>\">\n    <p class=\"bold pizza-title\" style=\"margin: 0 0 10px;\">\n        <span class=\"order-title\"><%= pizza.title %> (<%= size %>)</span>\n    </p>\n    <div class=\"order-text\">\n        <img class=\"radius-image\" src=\"../../www/assets/images/size-icon.svg\">\n        <span><%= pizza[size].size %></span>\n        <img class=\"weight-image\" src=\"../../www/assets/images/weight.svg\">\n        <span><%= pizza[size].weight %></span>\n    </div>\n\n    <div class=\"quantity-regulation-section\">\n        <span class=\"price\"><%= (pizza[size].price * quantity) %></span>\n        <a class=\"minus btn btn-xs btn-danger btn-circle\" href=\"#\">\n            <i class=\"glyphicon glyphicon-minus icon-white\">\n            </i>\n        </a>\n        <span class=\"label order-pizza-count\" style=\"color:black;\"><%= quantity %></span>\n        <a class=\"plus btn btn-xs btn-success btn-circle\" href=\"#\">\n            <i class=\"glyphicon glyphicon-plus icon-white\">\n\n            </i>\n        </a>\n        <a class=\"count-clear btn btn-xs btn-default btn-circle remove\" href=\"#\">\n            <i class=\"glyphicon glyphicon-remove icon-white\">\n\n            </i>\n        </a>\n    </div>\n\n</div>\n</div>\n");
+exports.PizzaCart_OneItem = ejs.compile("<div class=\"row\">\n    <div class=\"one-ordered-pizza-template\">\n    <img class=\"half-of-pizza\" alt=\"Піца\" src=\"<%= pizza.icon%>\">\n    <p class=\"bold pizza-title\" style=\"margin: 0 0 10px;\">\n        <span class=\"order-title\"><%= pizza.title %> (<%= size %>)</span>\n    </p>\n    <div class=\"order-text\">\n        <img class=\"radius-image\" src=\"/assets/images/size-icon.svg\">\n        <span><%= pizza[size].size %></span>\n        <img class=\"weight-image\" src=\"/assets/images/weight.svg\">\n        <span><%= pizza[size].weight %></span>\n    </div>\n\n    <div class=\"quantity-regulation-section\">\n        <span class=\"price\"><%= (pizza[size].price * quantity) %></span>\n        <a class=\"minus btn btn-xs btn-danger btn-circle\" href=\"#\">\n            <i class=\"glyphicon glyphicon-minus icon-white\">\n            </i>\n        </a>\n        <span class=\"label order-pizza-count\" style=\"color:black;\"><%= quantity %></span>\n        <a class=\"plus btn btn-xs btn-success btn-circle\" href=\"#\">\n            <i class=\"glyphicon glyphicon-plus icon-white\">\n\n            </i>\n        </a>\n        <a class=\"count-clear btn btn-xs btn-default btn-circle remove\" href=\"#\">\n            <i class=\"glyphicon glyphicon-remove icon-white\">\n\n            </i>\n        </a>\n    </div>\n\n</div>\n</div>\n");
 
-},{"ejs":9}],3:[function(require,module,exports){
+exports.PizzaCart_OneItemOrder =  ejs.compile("<div class=\"row\">\r\n    <div class=\"one-ordered-pizza-template\">\r\n        <img class=\"half-of-pizza\" alt=\"Піца\" src=\"<%= pizza.icon%>\">\r\n        <p class=\"bold pizza-title\" style=\"margin: 0 0 10px;\">\r\n            <span class=\"order-title\"><%= pizza.title %> (<%= size %>)</span>\r\n        </p>\r\n        <div class=\"order-text\">\r\n            <img class=\"radius-image\" src=\"/assets/images/size-icon.svg\">\r\n            <span><%= pizza[size].size %></span>\r\n            <img class=\"weight-image\" src=\"/assets/images/weight.svg\">\r\n            <span><%= pizza[size].weight %></span>\r\n        </div>\r\n\r\n        <div class=\"quantity-regulation-section\">\r\n            <span class=\"price\"><%= (pizza[size].price * quantity) %></span>\r\n        </div>\r\n\r\n    </div>\r\n</div>\r\n");
+
+},{"ejs":14}],6:[function(require,module,exports){
 /**
  * Created by chaika on 25.01.16.
  */
@@ -199,18 +274,27 @@ $(function(){
     var PizzaMenu = require('./pizza/PizzaMenu');
     var PizzaCart = require('./pizza/PizzaCart');
     var Pizza_List = require('./Pizza_List');
+    var PizzaOrder = require('./pizza/PizzaOrder');
+    var RightPanelOrder =  require('./pizza/RightPanelOrder');
+    var LiqPay = require('./LiqPay');
+    var GoogleMap = require('./GoogleMaps');
 
     PizzaCart.initialiseCart();
     PizzaMenu.initialiseMenu();
+    RightPanelOrder.initialiseOrderCart();
+    PizzaOrder.iniAll();
+    GoogleMap.initialize();
 
 
 });
-},{"./Pizza_List":1,"./pizza/PizzaCart":4,"./pizza/PizzaMenu":5}],4:[function(require,module,exports){
+},{"./GoogleMaps":2,"./LiqPay":3,"./Pizza_List":4,"./pizza/PizzaCart":7,"./pizza/PizzaMenu":8,"./pizza/PizzaOrder":9,"./pizza/RightPanelOrder":10}],7:[function(require,module,exports){
 /**
  * Created by chaika on 02.02.16.
  */
 var Templates = require('../Templates');
 var PizzaLocStorage = require('../../www/PizzaLocStorage');
+
+
 
 //Перелік розмірів піци
 var PizzaSize = {
@@ -310,7 +394,12 @@ function updateCart() {
 
     //Онволення однієї піци
     function showOnePizzaInCart(cart_item) {
+        //if (document.href == "/"){
         var html_code = Templates.PizzaCart_OneItem(cart_item);
+        // }
+        // else if (document.href == "/order.html"){
+        //    var html_code = Templates.PizzaCart_OneItemOrder(cart_item);
+        // }
 
         orderQuantity += 1;
 
@@ -332,7 +421,7 @@ function updateCart() {
             //Зменшуємо кількість замовлених піц
             if (cart_item.quantity > 1) {
                 cart_item.quantity -= 1;
-                    //Оновлюємо відображення
+                //Оновлюємо відображення
             }
 
             else{
@@ -377,13 +466,16 @@ exports.getPizzaInCart = getPizzaInCart;
 exports.initialiseCart = initialiseCart;
 
 exports.PizzaSize = PizzaSize;
-},{"../../www/PizzaLocStorage":6,"../Templates":2}],5:[function(require,module,exports){
+},{"../../www/PizzaLocStorage":11,"../Templates":5}],8:[function(require,module,exports){
 /**
  * Created by chaika on 02.02.16.
  */
 var Templates = require('../Templates');
 var PizzaCart = require('./PizzaCart');
-var Pizza_List = require('../Pizza_List');
+//var Pizza_List = require('../Pizza_List');
+
+var API = require('../API');
+var Pizza_List = [];
 
 //HTML едемент куди будуть додаватися піци
 var $pizza_list = $("#pizza_list");
@@ -451,37 +543,49 @@ function filterPizza(filter) {
 function initialiseMenu() {
     //Показуємо усі піци
     showPizzaList(Pizza_List);
+    API.getPizzaList(function(err,list){
+        if(err)
+            alert(err.message);
+        else
+        {
+            Pizza_List=list;
+            showPizzaList(Pizza_List);
 
-    $("#filter-button-all-types").click(function () {
-        filterPizza("all");
-        orange_button_activate($(this));
+        }
     });
 
-    $("#filter-button-meat").click(function () {
-        filterPizza("meat");
-        orange_button_activate($(this));
-    });
 
-    $("#filter-button-pineapples").click(function () {
-        filterPizza("pineapple");
-        orange_button_activate($(this));
-    });
-
-    $("#filter-button-mushrooms").click(function () {
-        filterPizza("mushroom");
-        orange_button_activate($(this));
-    });
-
-    $("#filter-button-seafood").click(function () {
-        filterPizza("ocean");
-        orange_button_activate($(this));
-    });
-
-    $("#filter-button-veggies").click(function () {
-        filterPizza("vega");
-        orange_button_activate($(this));
-    });
 }
+
+$("#filter-button-all-types").click(function () {
+    filterPizza("all");
+    orange_button_activate($(this));
+});
+
+$("#filter-button-meat").click(function () {
+    filterPizza("meat");
+    orange_button_activate($(this));
+});
+
+$("#filter-button-pineapples").click(function () {
+    filterPizza("pineapple");
+    orange_button_activate($(this));
+});
+
+$("#filter-button-mushrooms").click(function () {
+    filterPizza("mushroom");
+    orange_button_activate($(this));
+});
+
+$("#filter-button-seafood").click(function () {
+    filterPizza("ocean");
+    orange_button_activate($(this));
+});
+
+$("#filter-button-veggies").click(function () {
+    filterPizza("vega");
+    orange_button_activate($(this));
+});
 
 function orange_button_activate (button_activate){
     $(".btn-warning").removeClass("btn-warning");
@@ -492,7 +596,251 @@ function orange_button_activate (button_activate){
 
 exports.filterPizza = filterPizza;
 exports.initialiseMenu = initialiseMenu;
-},{"../Pizza_List":1,"../Templates":2,"./PizzaCart":4}],6:[function(require,module,exports){
+},{"../API":1,"../Templates":5,"./PizzaCart":7}],9:[function(require,module,exports){
+var $name_and_surname = $("#inputName");
+var $telephone_number = $("#inputPhone");
+var $address = $("#inputAddress");
+
+var  $users_name = $('.users-name');
+var $users_phone_number = $('.users-phone-number');
+var $users_address = $('.users-address');
+
+var $name_help_block = $('.name-help-block');
+var $phone_help_block = $('.phone-help-block');
+var $address_help_block = $('.address-help-block');
+
+var $next_step_button = $('#next');
+var PizzaLocStorage = require('../../www/PizzaLocStorage');
+var API = require('../API');
+var LiqPay = require('../LiqPay');
+//var $nextButton = $('next_button');
+
+var OrderPizzaInfo = [];
+
+OrderPizzaInfo = PizzaLocStorage.get('cart');
+
+
+
+function initAll(){
+    validate();
+  //  validateName();
+  //  validateTelephone();
+  //  validateAddress();
+    initNextBtn();
+
+}
+
+function initNextBtn() {
+    $next_step_button.click(function(){
+            serverValidation();
+    });
+}
+
+function validate (){
+    $name_and_surname.bind('input propertychange', validateName);
+    $telephone_number.bind('input propertychange', validateTelephone);
+    $address.bind('input propertychange', validateAddress);
+}
+
+function validateName (){
+    if ($name_and_surname.val().trim()===""){
+        $users_name.addClass('has-error');
+        $users_name.removeClass('has-success');
+        $name_help_block.show();
+    } else{
+        $users_name.addClass('has-success');
+        $users_name.removeClass('has-error');
+        $name_help_block.hide();
+    }
+}
+
+function validateTelephone (){
+    if ($telephone_number.val().trim()===""){
+        $users_phone_number.addClass('has-error');
+        $users_phone_number.removeClass('has-success');
+        $phone_help_block.show();
+    } else{
+        $users_phone_number.addClass('has-success');
+        $users_phone_number.removeClass('has-error');
+        $phone_help_block.hide();
+    }
+}
+
+function validateAddress (){
+    if ($address.val().trim()===""){
+        $users_address.addClass('has-error');
+        $users_address.removeClass('has-success');
+        $address_help_block.show();
+    } else{
+        $users_address.addClass('has-success');
+        $users_address.removeClass('has-error');
+        $address_help_block.hide();
+    }
+}
+
+
+
+
+
+function serverValidation() {
+    var Data = {
+        users_name: $users_name.val(),
+        users_phonenumb: $users_phone_number.val(),
+        users_address: $users_address.val(),
+        order_pizza_info:OrderPizzaInfo
+
+
+    };
+
+    API.createOrder(Data, function (err,res){
+            if (err){
+                alert('The website failed to register your order');
+            }
+            else {
+                console.log(res.data);
+                LiqPay.initializeLiqPay(res.data,res.signature);
+            }
+        }
+
+    );
+
+
+}
+
+
+
+exports.iniAll = initAll;
+},{"../../www/PizzaLocStorage":11,"../API":1,"../LiqPay":3}],10:[function(require,module,exports){
+/**
+ * Created by chaika on 02.02.16.
+ */
+var Templates = require('../Templates');
+var PizzaLocStorage = require('../../www/PizzaLocStorage');
+
+
+
+//Змінна в якій зберігаються перелік піц в кошику
+var Cart = [];
+
+//HTML едемент куди будуть додаватися піци
+var $cart = $("#cart-order");
+
+// function refresh(){
+//     Cart = [];
+//     updateCart();
+// }
+
+// $node.find(".appetizer").click(function () {
+//     $node.find(".appetizer").hide();
+// });
+
+
+
+
+function initialiseOrderCart() {
+    //Фукнція віпрацьвуватиме при завантаженні сторінки
+    //Тут можна наприклад, зчитати вміст корзини який збережено в Local Storage то показати його
+    var loaded = PizzaLocStorage.get('cart');
+    if(loaded){
+        Cart = loaded;
+    }
+
+
+    updateCart();
+}
+
+function getPizzaInCart() {
+    //Повертає піци які зберігаються в кошику
+    return Cart;
+}
+
+function updateCart() {
+    //Функція викликається при зміні вмісту кошика
+    //Тут можна наприклад показати оновлений кошик на екрані та зберегти вміт кошика в Local Storage
+
+    //Очищаємо старі піци в кошику
+    $cart.html();
+
+    //
+
+
+
+    //Онволення однієї піци
+    function showOnePizzaInCartOrder(cart_item) {
+        // if (document.href == "/"){
+        //     var html_code = Templates.PizzaCart_OneItem(cart_item);
+        // }
+        // else if (document.href == "/order.html"){
+        var html_code = Templates.PizzaCart_OneItemOrder(cart_item);
+        //}
+
+        //  ovar orderQuantity = 0;
+        // var orderSum = 0;rderQuantity += 1;
+
+        //orderSum += cart_item.quantity*cart_item.pizza[cart_item.size].price;
+
+        var $node = $(html_code);
+
+        //var appetizer = $node.find(".appetizer");
+
+        // $node.find(".plus").click(function(){
+        //     //Збільшуємо кількість замовлених піц
+        //     cart_item.quantity += 1;
+        //     //$node.find(".minus").prop("disabled", false);
+        //
+        //     //Оновлюємо відображення
+        //     updateCart();
+        // });
+        // $node.find(".minus").click(function(){
+        //     //Зменшуємо кількість замовлених піц
+        //     if (cart_item.quantity > 1) {
+        //         cart_item.quantity -= 1;
+        //         //Оновлюємо відображення
+        //     }
+        //
+        //     else{
+        //         removeFromCart(cart_item);
+        //         // appetizer.show();
+        //         // orderQuantity.hide();
+        //         // orderSum.hide();
+        //     }
+        //     updateCart();
+        // });
+
+        // $node.find(".remove").click(function(){
+        //     //$node.hide();
+        //     removeFromCart(cart_item);
+        //
+        // });
+
+
+        $cart.append($node);
+    }
+
+    Cart.forEach(showOnePizzaInCartOrder);
+
+    // if (Cart.length==0){
+    //     $("#appetizer-text").show();
+    // }
+    // else{
+    //     $("#appetizer-text").hide();
+    // }
+
+    // PizzaLocStorage.set('cart', Cart);
+
+    // $(".orders-count").text(orderQuantity);
+    // $(".sum").text(orderSum);
+
+}
+
+// exports.removeFromCart = removeFromCart;
+// exports.addToCart = addToCart;
+//
+// exports.getPizzaInCart = getPizzaInCart;
+exports.initialiseOrderCart = initialiseOrderCart;
+
+//exports.PizzaSize = PizzaSize;
+},{"../../www/PizzaLocStorage":11,"../Templates":5}],11:[function(require,module,exports){
 var basil =  require('basil.js');
 basil =  new  basil();
 
@@ -502,7 +850,7 @@ exports.set = function(key, value)  {
 exports.get = function(key)  {
     return basil.get(key);
 };
-},{"basil.js":7}],7:[function(require,module,exports){
+},{"basil.js":12}],12:[function(require,module,exports){
 (function () {
 	// Basil
 	var Basil = function (options) {
@@ -890,9 +1238,9 @@ exports.get = function(key)  {
 
 })();
 
-},{}],8:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 
-},{}],9:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 /*
  * EJS Embedded JavaScript templates
  * Copyright 2112 Matthew Eernisse (mde@fleegix.org)
@@ -1760,7 +2108,7 @@ if (typeof window != 'undefined') {
   window.ejs = exports;
 }
 
-},{"../package.json":11,"./utils":10,"fs":8,"path":12}],10:[function(require,module,exports){
+},{"../package.json":16,"./utils":15,"fs":13,"path":17}],15:[function(require,module,exports){
 /*
  * EJS Embedded JavaScript templates
  * Copyright 2112 Matthew Eernisse (mde@fleegix.org)
@@ -1926,7 +2274,7 @@ exports.cache = {
   }
 };
 
-},{}],11:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 module.exports={
   "_from": "ejs@^2.4.1",
   "_id": "ejs@2.5.7",
@@ -2007,7 +2355,7 @@ module.exports={
   "version": "2.5.7"
 }
 
-},{}],12:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 (function (process){
 // Copyright Joyent, Inc. and other Node contributors.
 //
@@ -2235,7 +2583,7 @@ var substr = 'ab'.substr(-1) === 'b'
 ;
 
 }).call(this,require('_process'))
-},{"_process":13}],13:[function(require,module,exports){
+},{"_process":18}],18:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -2421,4 +2769,4 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}]},{},[3]);
+},{}]},{},[6]);

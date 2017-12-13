@@ -37,12 +37,12 @@ function getIngredientsArray(pizza) {
                 <% if(pizza.small_size){ %>
                 <div class="<%= getPizzaColumn(pizza) %> centered">
                     <div>
-                        <img src="../../www/assets/images/size-icon.svg" class="size-icon">
+                        <img src="/assets/images/size-icon.svg" class="size-icon">
                         <span><%= pizza.small_size.size %></span>
                     </div>
 
                     <div>
-                        <img src="../../www/assets/images/weight.svg" class="weight-icon">
+                        <img src="/assets/images/weight.svg" class="weight-icon">
                         <span><%= pizza.small_size.weight %></span>
                     </div>
 
@@ -55,12 +55,12 @@ function getIngredientsArray(pizza) {
                 <% if(pizza.big_size){ %>
                 <div class="<%= getPizzaColumn(pizza) %> centered">
                     <div>
-                    <img src="../../www/assets/images/size-icon.svg" class="size-icon">
+                    <img src="/assets/images/size-icon.svg" class="size-icon">
                     <span><%= pizza.big_size.size %></span>
                     </div>
 
                     <div>
-                    <img src="../../www/assets/images/weight.svg" class="weight-icon">
+                    <img src="/assets/images/weight.svg" class="weight-icon">
                     <span><%= pizza.big_size.weight %></span>
                     </div>
 

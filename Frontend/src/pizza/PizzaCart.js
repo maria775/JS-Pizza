@@ -4,6 +4,8 @@
 var Templates = require('../Templates');
 var PizzaLocStorage = require('../../www/PizzaLocStorage');
 
+
+
 //Перелік розмірів піци
 var PizzaSize = {
     Big: "big_size",
@@ -102,7 +104,12 @@ function updateCart() {
 
     //Онволення однієї піци
     function showOnePizzaInCart(cart_item) {
+        //if (document.href == "/"){
         var html_code = Templates.PizzaCart_OneItem(cart_item);
+        // }
+        // else if (document.href == "/order.html"){
+        //    var html_code = Templates.PizzaCart_OneItemOrder(cart_item);
+        // }
 
         orderQuantity += 1;
 
@@ -124,7 +131,7 @@ function updateCart() {
             //Зменшуємо кількість замовлених піц
             if (cart_item.quantity > 1) {
                 cart_item.quantity -= 1;
-                    //Оновлюємо відображення
+                //Оновлюємо відображення
             }
 
             else{

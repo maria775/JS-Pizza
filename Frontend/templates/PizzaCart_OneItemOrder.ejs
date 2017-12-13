@@ -1,0 +1,19 @@
+<div class="row">
+    <div class="one-ordered-pizza-template">
+        <img class="half-of-pizza" alt="Піца" src="<%= pizza.icon%>">
+        <p class="bold pizza-title" style="margin: 0 0 10px;">
+            <span class="order-title"><%= pizza.title %> (<%= size %>)</span>
+        </p>
+        <div class="order-text">
+            <img class="radius-image" src="/assets/images/size-icon.svg">
+            <span><%= pizza[size].size %></span>
+            <img class="weight-image" src="/assets/images/weight.svg">
+            <span><%= pizza[size].weight %></span>
+        </div>
+
+        <div class="quantity-regulation-section">
+            <span class="price"><%= (pizza[size].price * quantity) %></span>
+        </div>
+
+    </div>
+</div>
